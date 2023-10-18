@@ -17,5 +17,7 @@ func main() {
 	r := gin.Default()
 	routes.InitRoutes(&r.RouterGroup)
 
-	r.Run()
+	if err := r.Run(); err != nil {
+		log.Fatal(err)
+	}
 }
