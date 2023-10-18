@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/joho/godotenv v1.5.1
+	github.com/odanaraujo/crud-golang v0.0.0-20230322022500-d24c177a471f
 )
 
 require (
