@@ -11,3 +11,6 @@ Creating an **API** implementing a *users* **CRUD** with golang. I will list all
 >The **router := gin.New()** statement will create a new gin router. Routers can be initialized in two ways, one using *New()* and the other using *Default()*.
 >The difference is that *New()* boots a router without any **middleware** while *Default()* boots the router with **logger** and **recovery middleware**
 
+* [go-playground-validator](https://github.com/go-playground/validator)
+1. Package validator implements value validations for structs and individual fields based on tags.
+
