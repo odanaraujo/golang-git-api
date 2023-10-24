@@ -14,3 +14,9 @@ Creating an **API** implementing a *users* **CRUD** with golang. I will list all
 * [go-playground-validator](https://github.com/go-playground/validator)
 1. Package validator implements value validations for structs and individual fields based on tags.
 
+* [logger uber-go/zap](https://github.com/uber-go/zap)
+1. library to configure logger in golang project
+
+>zap.NewProduction(): Basicamente, ele loga o json de forma produtiva, assim, é uma forma simples de logar formatado. Podemos inicalizar esse objeto na mão e colocar a nossa opção de configuração, assim, essa é uma opção de inicializar de forma rápida.
+
+>zap.Config(): Seria a forma de inicializar nas mãos, ele tem várias opções que podemos utilizar na configuração do logger.

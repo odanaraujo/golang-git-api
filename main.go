@@ -1,23 +1,24 @@
 package main
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/odanaraujo/golang/users-api/src/configuration/logger"
 	"github.com/odanaraujo/golang/users-api/src/controller/routes"
 )
 
 func main() {
 
+	logger.Info("init main")
+
 	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file")
+		logger.Error("Error loading .env file", err)
 	}
 
 	r := gin.Default()
 	routes.InitRoutes(&r.RouterGroup)
 
 	if err := r.Run(); err != nil {
-		log.Fatal(err)
+		logger.Error("error init server", err)
 	}
 }
