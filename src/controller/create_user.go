@@ -1,14 +1,13 @@
 package controller
 
 import (
-	"fmt"
 	"math/rand"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/odanaraujo/crud-golang/src/controller/model/response"
-	"github.com/odanaraujo/golang/users-api/src/configuration/exception"
+	"github.com/odanaraujo/golang/users-api/src/configuration/exception/validation"
 	"github.com/odanaraujo/golang/users-api/src/controller/model/request"
 )
 
@@ -17,8 +16,9 @@ func CreateUser(ctx *gin.Context) {
 	var userRequest request.UserRequest
 
 	if err := ctx.ShouldBindJSON(&userRequest); err != nil {
-		excp := exception.BadRequestException(fmt.Sprintf("there are some incorrect fields, error=%s", err))
+		excp := validation.ValidateUserRequest(err)
 		ctx.JSON(excp.Code, excp)
+		return
 	}
 
 	userResponse := response.UserResponse{
