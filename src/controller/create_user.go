@@ -1,16 +1,16 @@
 package controller
 
 import (
-	"math/rand"
-	"net/http"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
 	"github.com/odanaraujo/crud-golang/src/configuration/logger"
-	"github.com/odanaraujo/crud-golang/src/controller/model/response"
-
 	"github.com/odanaraujo/golang/users-api/src/configuration/validation"
 	"github.com/odanaraujo/golang/users-api/src/controller/model/request"
+	"github.com/odanaraujo/golang/users-api/src/model"
+	"net/http"
+)
+
+var (
+	UserDomainInterface model.UserDomainInterface
 )
 
 func CreateUser(ctx *gin.Context) {
@@ -26,12 +26,14 @@ func CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	userResponse := response.UserResponse{
-		ID:    strconv.FormatInt(int64(rand.Intn(10)+1), 10),
-		Name:  userRequest.Name,
-		Email: userRequest.Email,
-		Age:   userRequest.Age,
+	domain := model.NewUSerDomain(userRequest.Email, userRequest.Email, userRequest.Password, userRequest.Age)
+
+	if err := domain.CreateUser(); err != nil {
+		logger.Error("error trying create user domain", err)
+		ctx.JSON(err.Code, err)
+		return
 	}
 
-	ctx.JSON(http.StatusOK, userResponse)
+	ctx.String(http.StatusOK, "")
+
 }

@@ -21,7 +21,7 @@ const (
 	LOG_LEVEL   = "LOG_LEVEL"
 )
 
-func nit() {
+func init() {
 
 	logConfig := zap.Config{
 		OutputPaths: []string{getOutputLogs()},
