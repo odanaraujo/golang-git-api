@@ -6,9 +6,10 @@ import (
 )
 
 // initialize the routes
-func InitRoutes(r *gin.RouterGroup) {
-	r.GET("/user/:id", controller.GetUserByID)
-	r.GET("/getUserByEmail/:email", controller.GetUserByEmail)
+func InitRoutes(r *gin.RouterGroup, controller controller.UserControllerInterface) {
+
+	r.GET("/user/:id", controller.FindUserByID)
+	r.GET("/getUserByEmail/:email", controller.FindUserByEmail)
 	r.POST("/user", controller.CreateUser)
 	r.PUT("/user/:id", controller.UpdateUser)
 	r.DELETE("/user/:id", controller.DeleteUser)

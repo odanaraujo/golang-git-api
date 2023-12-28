@@ -8,7 +8,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.1
 	github.com/go-playground/validator/v10 v10.15.5
 	github.com/joho/godotenv v1.5.1
-	github.com/odanaraujo/crud-golang v0.0.0-20230322022500-d24c177a471f
 	go.uber.org/zap v1.26.0
 )
 
