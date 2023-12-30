@@ -3,36 +3,52 @@ package model
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"github.com/odanaraujo/golang/users-api/src/configuration/exception"
 )
+
+type UserDomainInterface interface {
+	GetName() string
+	GetEmail() string
+	GetPassword() string
+	GetAge() uint8
+
+	EncryptPassword()
+}
 
 // constructor interface
 func NewUSerDomain(name, email, password string, age uint8) UserDomainInterface {
-	return &UserDomain{
-		Name:     name,
-		Email:    email,
-		Password: password,
-		Age:      age,
+	return &userDomain{
+		name:     name,
+		email:    email,
+		password: password,
+		age:      age,
 	}
 }
 
-type UserDomain struct {
-	Name     string
-	Email    string
-	Password string
-	Age      uint8
+func (domain *userDomain) GetName() string {
+	return domain.name
 }
 
-func (domain *UserDomain) EncryptPassword() {
+func (domain *userDomain) GetEmail() string {
+	return domain.email
+}
+
+func (domain *userDomain) GetPassword() string {
+	return domain.password
+}
+func (domain *userDomain) GetAge() uint8 {
+	return domain.age
+}
+
+type userDomain struct {
+	name     string
+	email    string
+	password string
+	age      uint8
+}
+
+func (domain *userDomain) EncryptPassword() {
 	hash := md5.New()
 	defer hash.Reset()
-	hash.Write([]byte(domain.Password))
-	domain.Password = hex.EncodeToString(hash.Sum(nil))
-}
-
-type UserDomainInterface interface {
-	CreateUser() *exception.Exception
-	UpdateUser(string) *exception.Exception
-	FindUser(string) (*UserDomain, *exception.Exception)
-	DeleteUser(string) *exception.Exception
+	hash.Write([]byte(domain.password))
+	domain.password = hex.EncodeToString(hash.Sum(nil))
 }

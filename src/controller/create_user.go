@@ -6,6 +6,7 @@ import (
 	"github.com/odanaraujo/golang/users-api/src/configuration/validation"
 	"github.com/odanaraujo/golang/users-api/src/controller/model/request"
 	"github.com/odanaraujo/golang/users-api/src/model"
+	"github.com/odanaraujo/golang/users-api/src/model/service"
 	"net/http"
 )
 
@@ -26,9 +27,11 @@ func CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	domain := model.NewUSerDomain(userRequest.Email, userRequest.Email, userRequest.Password, userRequest.Age)
+	domain := model.NewUSerDomain(userRequest.Name, userRequest.Email, userRequest.Password, userRequest.Age)
 
-	if err := domain.CreateUser(); err != nil {
+	userService := service.NewUserDomainService()
+
+	if err := userService.CreateUser(domain); err != nil {
 		logger.Error("error trying create user domain", err)
 		ctx.JSON(err.Code, err)
 		return
