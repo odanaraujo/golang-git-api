@@ -7,10 +7,18 @@ import (
 	"go.uber.org/zap"
 )
 
-func (service *userDomainService) CreateUser(user model.UserDomainInterface) *exception.Exception {
+func (service *userDomainService) CreateUser(user model.UserDomainInterface) (model.UserDomainInterface, *exception.Exception) {
 	logger.Info("init create user service", zap.String("journey", "CreateUser"))
 
 	user.EncryptPassword()
 
-	return nil
+	userDomainRepository, err := service.userRepo.CreateUser(user)
+
+	if err != nil {
+		logger.Error("Unable to save user", err,
+			zap.String("Journey", "CreateUserService"))
+		return nil, exception.InternalServerException(err.Error())
+	}
+
+	return userDomainRepository, nil
 }

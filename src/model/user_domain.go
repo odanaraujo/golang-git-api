@@ -1,27 +1,15 @@
 package model
 
-import (
-	"crypto/md5"
-	"encoding/hex"
-)
-
-type UserDomainInterface interface {
-	GetName() string
-	GetEmail() string
-	GetPassword() string
-	GetAge() uint8
-
-	EncryptPassword()
+type userDomain struct {
+	id       string
+	name     string
+	email    string
+	password string
+	age      uint8
 }
 
-// constructor interface
-func NewUSerDomain(name, email, password string, age uint8) UserDomainInterface {
-	return &userDomain{
-		name:     name,
-		email:    email,
-		password: password,
-		age:      age,
-	}
+func (domain *userDomain) GetID() string {
+	return domain.id
 }
 
 func (domain *userDomain) GetName() string {
@@ -39,16 +27,6 @@ func (domain *userDomain) GetAge() uint8 {
 	return domain.age
 }
 
-type userDomain struct {
-	name     string
-	email    string
-	password string
-	age      uint8
-}
-
-func (domain *userDomain) EncryptPassword() {
-	hash := md5.New()
-	defer hash.Reset()
-	hash.Write([]byte(domain.password))
-	domain.password = hex.EncodeToString(hash.Sum(nil))
+func (domain *userDomain) SetID(id string) {
+	domain.id = id
 }
