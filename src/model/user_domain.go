@@ -8,6 +8,10 @@ type userDomain struct {
 	age      uint8
 }
 
+func (domain *userDomain) GetID() string {
+	return domain.id
+}
+
 func (domain *userDomain) GetName() string {
 	return domain.name
 }

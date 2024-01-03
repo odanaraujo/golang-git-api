@@ -1,6 +1,7 @@
 package model
 
 type UserDomainInterface interface {
+	GetID() string
 	GetName() string
 	GetEmail() string
 	GetPassword() string
