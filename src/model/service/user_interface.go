@@ -3,13 +3,16 @@ package service
 import (
 	"github.com/odanaraujo/golang/users-api/src/configuration/exception"
 	"github.com/odanaraujo/golang/users-api/src/model"
+	"github.com/odanaraujo/golang/users-api/src/model/repository"
 )
 
-func NewUserDomainService() UserDomainService {
-	return &userDomainService{}
+func NewUserDomainService(userRepository repository.UserRepository) UserDomainService {
+
+	return &userDomainService{userRepository}
 }
 
 type userDomainService struct {
+	userRepo repository.UserRepository
 }
 
 type UserDomainService interface {

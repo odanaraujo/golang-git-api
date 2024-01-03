@@ -12,5 +12,13 @@ func (service *userDomainService) CreateUser(user model.UserDomainInterface) *ex
 
 	user.EncryptPassword()
 
+	_, err := service.userRepo.CreateUser(user)
+
+	if err != nil {
+		logger.Error("Unable to save user", err,
+			zap.String("Journey", "CreateUserService"))
+		return exception.InternalServerException(err.Error())
+	}
+
 	return nil
 }
