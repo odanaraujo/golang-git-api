@@ -9,6 +9,7 @@ import (
 	"github.com/odanaraujo/golang/users-api/src/model/repository/entity"
 	"github.com/odanaraujo/golang/users-api/src/model/repository/entity/converter"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/zap"
 	"os"
@@ -24,7 +25,8 @@ func (ur *userRepository) FindUserByID(id string) (model.UserDomainInterface, *e
 
 	userEntity := &entity.UserEntity{}
 
-	filter := bson.D{{Key: "_id", Value: id}}
+	value, _ := primitive.ObjectIDFromHex(id)
+	filter := bson.D{{Key: "_id", Value: value}}
 	err := collection.FindOne(ctx, filter).Decode(userEntity)
 
 	if err != nil {
