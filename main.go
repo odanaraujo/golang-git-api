@@ -12,12 +12,14 @@ func main() {
 
 	if err := godotenv.Load(); err != nil {
 		logger.Error("Error loading .env file", err)
+		return
 	}
 
 	mongoDBConnection, err := mongodb.NewMongoDBConnection()
 
 	if err != nil {
 		logger.Error("Unable to connect to database", err)
+		return
 	}
 
 	userController := initDependencies(mongoDBConnection)
@@ -27,5 +29,6 @@ func main() {
 
 	if err := r.Run(); err != nil {
 		logger.Error("error init server", err)
+		return
 	}
 }
