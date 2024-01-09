@@ -29,8 +29,8 @@ func (uc *userControllerInterface) FindUserByID(ctx *gin.Context) {
 	if err != nil {
 		logger.Error("Error when searching for user", err, zap.String(
 			"Journey", "FindUserByID"))
-		excp := exception.InternalServerException(err.Error())
-		ctx.JSON(err.Code, excp)
+
+		ctx.JSON(err.Code, err)
 		return
 	}
 

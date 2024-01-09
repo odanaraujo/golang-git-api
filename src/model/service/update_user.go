@@ -12,6 +12,12 @@ func (service *userDomainService) UpdateUser(id string, user model.UserDomainInt
 
 	user.EncryptPassword()
 
+	if _, err := service.FindUserByID(id); err != nil {
+		logger.Error("user id not found", err,
+			zap.String("Journey", "UpdateUser"))
+		return err
+	}
+
 	err := service.userRepo.UpdateUser(id, user)
 
 	if err != nil {

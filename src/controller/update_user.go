@@ -35,21 +35,13 @@ func (uc *userControllerInterface) UpdateUser(ctx *gin.Context) {
 		return
 	}
 
-	if _, err := uc.service.FindUserByID(id); err != nil {
-		logger.Error("user not found with this id", err, zap.String(
-			"Journey", "UpdateUser"))
-		errMessage := exception.NotFoundException(err.Error())
-		ctx.JSON(errMessage.Code, errMessage)
-		return
-	}
-
 	domain := model.NewUSerUpdateDomain(userRequest.Name, userRequest.Age)
 
 	if err := uc.service.UpdateUser(id, domain); err != nil {
 		logger.Error("error when update for user in the database", err, zap.String(
 			"Journey", "UpdateUser"))
-		errMessage := exception.InternalServerException(err.Error())
-		ctx.JSON(err.Code, errMessage)
+
+		ctx.JSON(err.Code, err)
 		return
 	}
 
