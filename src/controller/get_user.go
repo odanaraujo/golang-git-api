@@ -30,7 +30,7 @@ func (uc *userControllerInterface) FindUserByID(ctx *gin.Context) {
 		logger.Error("Error when searching for user", err, zap.String(
 			"Journey", "FindUserByID"))
 		excp := exception.InternalServerException(err.Error())
-		ctx.JSON(http.StatusInternalServerError, excp)
+		ctx.JSON(err.Code, excp)
 		return
 	}
 
