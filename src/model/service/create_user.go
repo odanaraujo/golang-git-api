@@ -14,6 +14,12 @@ func (service *userDomainService) CreateUser(user model.UserDomainInterface) (mo
 
 	userDomainRepository, err := service.userRepo.CreateUser(user)
 
+	userBD, _ := service.FindUserByEmail(user.GetEmail())
+
+	if userBD != nil {
+		return nil, exception.BadRequestException("email is already registered in another account")
+	}
+
 	if err != nil {
 		logger.Error("Unable to save user", err,
 			zap.String("Journey", "CreateUserService"))

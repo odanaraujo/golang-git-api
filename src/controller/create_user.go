@@ -11,10 +11,6 @@ import (
 	"net/http"
 )
 
-var (
-	UserDomainInterface model.UserDomainInterface
-)
-
 func (uc *userControllerInterface) CreateUser(ctx *gin.Context) {
 
 	logger.Info("Init CreateUser Controller")
@@ -33,7 +29,8 @@ func (uc *userControllerInterface) CreateUser(ctx *gin.Context) {
 	domainResult, err := uc.service.CreateUser(domain)
 
 	if err != nil {
-		logger.Error("error trying create user domain", err)
+		logger.Error("error trying create user domain", err, zap.String(
+			"Journey", "CreateUser"))
 		ctx.JSON(err.Code, err)
 		return
 	}

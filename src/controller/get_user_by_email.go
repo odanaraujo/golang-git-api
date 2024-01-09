@@ -27,7 +27,6 @@ func (uc *userControllerInterface) FindUserByEmail(ctx *gin.Context) {
 
 	if err != nil {
 		logger.Error("error get user email", err, zap.String("Journey", "FindUserByEmail"))
-		err := exception.BadRequestException(err.Error())
 		ctx.JSON(err.Code, err)
 		return
 	}
