@@ -17,7 +17,7 @@ func (uc *userControllerInterface) UpdateUser(ctx *gin.Context) {
 	var userRequest request.UserUpdateRequest
 	id := ctx.Param("id")
 
-	userIdHex, err := primitive.ObjectIDFromHex(id)
+	_, err := primitive.ObjectIDFromHex(id)
 
 	if err != nil {
 		logger.Error("error trying validate to id", err, zap.String(
@@ -37,11 +37,11 @@ func (uc *userControllerInterface) UpdateUser(ctx *gin.Context) {
 
 	domain := model.NewUSerUpdateDomain(userRequest.Name, userRequest.Age)
 
-	if err := uc.service.UpdateUser(userIdHex, domain); err != nil {
+	if err := uc.service.UpdateUser(id, domain); err != nil {
 		logger.Error("error when update for user in the database", err, zap.String(
 			"Journey", "UpdateUser"))
-		errMessage := exception.InternalServerException(err.Error())
-		ctx.JSON(err.Code, errMessage)
+
+		ctx.JSON(err.Code, err)
 		return
 	}
 

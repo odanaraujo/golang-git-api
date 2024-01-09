@@ -4,31 +4,27 @@ import (
 	"context"
 	"github.com/odanaraujo/golang/users-api/src/configuration/exception"
 	"github.com/odanaraujo/golang/users-api/src/configuration/logger"
-	"github.com/odanaraujo/golang/users-api/src/model"
-	"github.com/odanaraujo/golang/users-api/src/model/repository/entity/converter"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 	"os"
 )
 
-func (ur *userRepository) UpdateUser(id string, userDomain model.UserDomainInterface) *exception.Exception {
-	logger.Info("init UpdateUser repository", zap.String("Journey", "UpdateUser"))
+func (ur *userRepository) DeleteUser(id string) *exception.Exception {
+	logger.Info("init FindUserByID repository", zap.String("Journey", "FindUserByID"))
 
-	ctx := context.Background()
 	collectionName := os.Getenv(MONGODB_USER_COLLECTION)
 	collection := ur.databaseConnection.Collection(collectionName)
-
-	value := converter.ConverterDomainToEntity(userDomain)
 
 	userIdHex, _ := primitive.ObjectIDFromHex(id)
 
 	filter := bson.D{{Key: "_id", Value: userIdHex}}
-	update := bson.D{{Key: "$set", Value: value}}
 
-	_, err := collection.UpdateOne(ctx, filter, update)
-
+	_, err := collection.DeleteOne(context.Background(), filter)
 	if err != nil {
+		logger.Error("Error trying to delete user",
+			err,
+			zap.String("journey", "deleteUser"))
 		return exception.InternalServerException(err.Error())
 	}
 

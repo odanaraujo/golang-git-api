@@ -4,14 +4,19 @@ import (
 	"github.com/odanaraujo/golang/users-api/src/configuration/exception"
 	"github.com/odanaraujo/golang/users-api/src/configuration/logger"
 	"github.com/odanaraujo/golang/users-api/src/model"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 )
 
-func (service *userDomainService) UpdateUser(id primitive.ObjectID, user model.UserDomainInterface) *exception.Exception {
+func (service *userDomainService) UpdateUser(id string, user model.UserDomainInterface) *exception.Exception {
 	logger.Info("init update user service", zap.String("journey", "UpdateUser"))
 
 	user.EncryptPassword()
+
+	if _, err := service.FindUserByID(id); err != nil {
+		logger.Error("user id not found", err,
+			zap.String("Journey", "UpdateUser"))
+		return err
+	}
 
 	err := service.userRepo.UpdateUser(id, user)
 
