@@ -21,19 +21,11 @@ func (uc *userControllerInterface) DeleteUser(ctx *gin.Context) {
 		return
 	}
 
-	if _, err := uc.service.FindUserByID(id); err != nil {
-		logger.Error("user not found with this id", err, zap.String(
-			"Journey", "UpdateUser"))
-		errMessage := exception.NotFoundException(err.Error())
-		ctx.JSON(errMessage.Code, errMessage)
-		return
-	}
-
 	if err := uc.service.DeleteUser(id); err != nil {
 		logger.Error("Error trying delete user", err, zap.String(
 			"Journey", "DeleteUser"))
-		errMessage := exception.BadRequestException(err.Error())
-		ctx.JSON(errMessage.Code, errMessage)
+
+		ctx.JSON(err.Code, err)
 		return
 	}
 
