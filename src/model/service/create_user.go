@@ -14,9 +14,7 @@ func (service *userDomainService) CreateUser(user model.UserDomainInterface) (mo
 
 	userDomainRepository, err := service.userRepo.CreateUser(user)
 
-	userBD, _ := service.FindUserByEmail(user.GetEmail())
-
-	if userBD != nil {
+	if userBD, _ := service.FindUserByEmail(user.GetEmail()); userBD != nil {
 		return nil, exception.BadRequestException("email is already registered in another account")
 	}
 
