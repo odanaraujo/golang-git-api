@@ -27,7 +27,7 @@ func (uc *userControllerInterface) LoginUser(ctx *gin.Context) {
 
 	domain := model.NewUserLoginDomain(loginRequest.Email, loginRequest.Password)
 
-	model, err := uc.service.LoginUserService(domain)
+	userModel, err := uc.service.LoginUserService(domain)
 
 	if err != nil {
 		logger.Error("error trying validate email and password", err, zap.String(
@@ -37,6 +37,18 @@ func (uc *userControllerInterface) LoginUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, view.ConverterDomainToResponse(model))
+	token, err := userModel.GenerateToken()
+
+	if err != nil {
+		logger.Error("error trying generate jwt token", err, zap.String(
+			"Journey", "LoginUser"))
+
+		ctx.JSON(err.Code, err)
+		return
+	}
+
+	ctx.Header("Authorization", token)
+
+	ctx.JSON(http.StatusOK, view.ConverterDomainToResponse(userModel))
 
 }

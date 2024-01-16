@@ -13,7 +13,11 @@ func (service *userDomainService) LoginUserService(userDomain model.UserDomainIn
 
 	userDomain.EncryptPassword()
 
-	userDomain, err := service.findUserByEmailAndPassword(userDomain.GetEmail(), userDomain.GetPassword())
+	user, err := service.findUserByEmailAndPassword(userDomain.GetEmail(), userDomain.GetPassword())
+
+	if err != nil {
+		return nil, err
+	}
 
 	if err != nil {
 		return nil, err
@@ -22,5 +26,5 @@ func (service *userDomainService) LoginUserService(userDomain model.UserDomainIn
 	if err != nil {
 		return nil, exception.InternalServerException(err.Error())
 	}
-	return userDomain, nil
+	return user, nil
 }

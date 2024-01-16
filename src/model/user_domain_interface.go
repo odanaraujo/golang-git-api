@@ -1,5 +1,7 @@
 package model
 
+import "github.com/odanaraujo/golang/users-api/src/configuration/exception"
+
 type UserDomainInterface interface {
 	GetID() string
 	GetName() string
@@ -9,6 +11,8 @@ type UserDomainInterface interface {
 	SetID(id string)
 
 	EncryptPassword()
+
+	GenerateToken() (string, *exception.Exception)
 }
 
 // constructor interface
