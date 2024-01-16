@@ -21,4 +21,5 @@ type UserDomainService interface {
 	FindUserByID(id string) (model.UserDomainInterface, *exception.Exception)
 	DeleteUser(id string) *exception.Exception
 	FindUserByEmail(id string) (model.UserDomainInterface, *exception.Exception)
+	LoginUserService(user model.UserDomainInterface) (model.UserDomainInterface, *exception.Exception)
 }
