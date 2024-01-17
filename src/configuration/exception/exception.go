@@ -15,7 +15,7 @@ type Causes struct {
 	Message string `json:"message"`
 }
 
-//podemos usar bibliotecas que podemos acabar utilizando que recebe error por parâmetro
+// podemos usar bibliotecas que podemos acabar utilizando que recebe error por parâmetro
 // para não criar uma variável e retornar, criamos um método chamado error.
 // quando precisar passar error por parâmetro, passaremos esse método.
 func (e *Exception) Error() string {
@@ -37,6 +37,14 @@ func BadRequestException(message string) *Exception {
 		Message: message,
 		Err:     "bad_request",
 		Code:    http.StatusBadRequest,
+	}
+}
+
+func UnauthorizedRequestException(message string) *Exception {
+	return &Exception{
+		Message: message,
+		Err:     "unauthorized",
+		Code:    http.StatusUnauthorized,
 	}
 }
 

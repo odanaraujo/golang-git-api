@@ -26,4 +26,5 @@ type UserRepository interface {
 	FindUserByID(id string) (model.UserDomainInterface, *exception.Exception)
 	UpdateUser(id string, userModel model.UserDomainInterface) *exception.Exception
 	DeleteUser(id string) *exception.Exception
+	FindUserByEmailAndPassword(email string, password string) (model.UserDomainInterface, *exception.Exception)
 }
