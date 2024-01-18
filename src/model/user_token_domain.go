@@ -2,14 +2,19 @@ package model
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/odanaraujo/golang/users-api/src/configuration/exception"
+	"github.com/odanaraujo/golang/users-api/src/configuration/logger"
 	"os"
 	"strings"
 	"time"
 )
 
-const jwtUserKey = "JWT_USER_KEY"
+const (
+	jwtUserKey   = "JWT_USER_KEY"
+	authorizatio = "Authorization"
+)
 
 func (ud *userDomain) GenerateToken() (string, *exception.Exception) {
 
@@ -35,8 +40,11 @@ func (ud *userDomain) GenerateToken() (string, *exception.Exception) {
 	return tokenStringBearer, nil
 }
 
-func VerifyToken(tokenValue string) (UserDomainInterface, *exception.Exception) {
+func VerifyTokenMiddleware(c *gin.Context) {
+
 	secret := os.Getenv(jwtUserKey)
+	tokenValue := removeBearePrefix(c.Request.Header.Get(authorizatio))
+
 	token, err := jwt.Parse(removeBearePrefix(tokenValue), func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); ok {
 			return []byte(secret), nil
@@ -46,22 +54,29 @@ func VerifyToken(tokenValue string) (UserDomainInterface, *exception.Exception) 
 	})
 
 	if err != nil {
-		return nil, exception.UnauthorizedRequestException("invalid token")
+		excp := exception.UnauthorizedRequestException("invalid token")
+		c.JSON(excp.Code, excp)
+		c.Abort()
+		return
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 
 	if !ok || !token.Valid {
-		return nil, exception.UnauthorizedRequestException("invalid token")
+		excp := exception.UnauthorizedRequestException("invalid token")
+		c.JSON(excp.Code, excp)
+		c.Abort()
+		return
 	}
 
-	return &userDomain{
+	userDomain := userDomain{
 		id:    claims["id"].(string),
 		name:  claims["name"].(string),
 		email: claims["email"].(string),
 		age:   uint8(claims["age"].(float64)),
-	}, nil
+	}
 
+	logger.Info(fmt.Sprintf("user authorization: %#v", userDomain))
 }
 
 func removeBearePrefix(token string) string {
